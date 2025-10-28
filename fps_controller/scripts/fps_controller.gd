@@ -65,7 +65,7 @@ func _ready():
 	#CROUCH_SHAPECAST.add_exception($".")
 
 func _physics_process(delta):
-	Global.debug.add_property("MovementSpeed",_speed,3)
+	#Global.debug.add_property(CUR_speed,3)
 
 	_update_camera(delta)
 
@@ -77,7 +77,7 @@ func update_input(speed: float, acceleration: float, deceleration: float) -> voi
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
+
 	if direction:
 		velocity.x = lerp(velocity.x, direction.x * speed, acceleration)
 		velocity.z = lerp(velocity.z, direction.z * speed, acceleration)

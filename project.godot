@@ -13,6 +13,7 @@ config_version=5
 config/name="fps"
 run/main_scene="uid://c7l47sqh6qcia"
 config/features=PackedStringArray("4.5", "Forward Plus")
+run/max_fps=60
 config/icon="res://icon.svg"
 
 [autoload]
@@ -21,11 +22,13 @@ Global="*res://scripts/global.gd"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
-window/size/mode=3
+window/size/viewport_width=960
+window/size/viewport_height=540
+window/size/mode=4
+window/size/resizable=false
 window/size/borderless=true
-window/vsync/vsync_mode=2
+window/stretch/mode="viewport"
+window/vsync/vsync_mode=0
 
 [editor_plugins]
 
@@ -85,9 +88,46 @@ sprint={
 
 [rendering]
 
+rendering_device/vsync/swapchain_image_count=2
 textures/canvas_textures/default_texture_filter=0
+environment/ssao/quality=1
+
+[shader_globals]
+
+affine_texture_mapping={
+"type": "bool",
+"value": true
+}
+fog_color={
+"type": "color",
+"value": Color(0, 0, 0, 1)
+}
+fog_start_distance={
+"type": "float",
+"value": 0.0
+}
+fog_end_distance={
+"type": "float",
+"value": 0.0
+}
+cull_distance={
+"type": "float",
+"value": 64.0
+}
+texture_filtering={
+"type": "bool",
+"value": false
+}
+texture_lod_halve_distance={
+"type": "float",
+"value": 0.0
+}
+vertex_snap_intensity={
+"type": "int",
+"value": 2
+}
 
 [xr]
 
+shaders/enabled=true
 shaders/canvas_textures/default_texture_filter=0
-shaders/vsync/vsync_mode=2

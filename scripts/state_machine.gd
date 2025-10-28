@@ -17,10 +17,11 @@ func _ready():
 
 func _process(delta):
 	CURRENT_STATE.update(delta)
-	Global.debug.add_property("CurrentState", CURRENT_STATE.name,1)
+	
 	
 func _physics_process(delta):
 	CURRENT_STATE.physics_update(delta)
+	Global.debug.add_property("CurrentState", CURRENT_STATE.name,1)
 
 func on_child_transition(new_state_name: StringName) -> void:
 	var new_state = states.get(new_state_name)

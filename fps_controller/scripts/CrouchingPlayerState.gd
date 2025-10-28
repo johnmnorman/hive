@@ -21,7 +21,7 @@ func enter(previous_state) -> void:
 func exit() -> void:
 	RELEASED = false
 	
-func update(delta):
+func physics_update(delta):
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
@@ -31,6 +31,9 @@ func update(delta):
 	elif Input.is_action_pressed("crouch") == false and RELEASED == false:
 		RELEASED = true
 		uncrouch()
+		
+	if PLAYER.velocity.y < 0.0 and !PLAYER.is_on_floor():
+		transition.emit("FallingPlayerState")
 	
 		
 func uncrouch():

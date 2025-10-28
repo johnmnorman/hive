@@ -4,8 +4,8 @@ extends PlayerMovementState
 
 #@export var ANIMATION : AnimationPlayer
 @export var SPEED: float = 5.0
-@export var ACCELERATION : float = 0.25
-@export var DECELERATION : float = 0.3
+@export var ACCELERATION : float = 0.15
+@export var DECELERATION : float = 0.5
 
 @export var TOP_ANIM_SPEED : float = 2.0
 
@@ -22,7 +22,7 @@ func enter(previous_state) -> void:
 func exit() -> void:
 	ANIMATION.speed_scale = 1.0
 	
-func update(delta):
+func physics_update(delta):
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
@@ -42,6 +42,9 @@ func update(delta):
 		
 	if Input.is_action_just_pressed("jump") and PLAYER.is_on_floor():
 		transition.emit("JumpingPlayerState")
+	
+	if PLAYER.velocity.y < 0.0 and !PLAYER.is_on_floor():
+		transition.emit("FallingPlayerState")
 	
 func set_animation_speed(spd):
 	var alpha = remap(spd, 0.0, SPEED, 0.0, 1.0)

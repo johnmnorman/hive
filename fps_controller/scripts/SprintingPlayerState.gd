@@ -16,7 +16,7 @@ func enter(previous_state) -> void:
 func exit() -> void:
 	ANIMATION.speed_scale = 1.0
 	
-func update(delta):
+func physics_update(delta):
 	set_animation_speed(Global.player.velocity.length())
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
@@ -30,6 +30,9 @@ func update(delta):
 		
 	if Input.is_action_just_pressed("jump") and PLAYER.is_on_floor():
 		transition.emit("JumpingPlayerState")
+		
+	if PLAYER.velocity.y < 0.0 and !PLAYER.is_on_floor():
+		transition.emit("FallingPlayerState")
 		
 func set_animation_speed(spd):
 	var alpha = remap(spd, 0.0, SPEED, 0.0, 1.0)

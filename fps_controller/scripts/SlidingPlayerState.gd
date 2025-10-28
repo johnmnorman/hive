@@ -17,7 +17,7 @@ func enter(previous_state) -> void:
 	ANIMATION.speed_scale = 1.0
 	ANIMATION.play("slide", -1.0, SLIDE_ANIM_SPEED)
 	
-func update(delta):
+func physics_update(delta):
 	PLAYER.update_gravity(delta)
 	PLAYER.update_velocity()
 	

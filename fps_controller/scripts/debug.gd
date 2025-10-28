@@ -22,7 +22,7 @@ func _input(event):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	frames_per_second = "%.2f" % (1.0/delta)
-	Global.debug.add_property("FPS",frames_per_second,2)
+	#Global.debug.add_property("FPS",frames_per_second,2)
 #	property.text = property.name + ": " + frames_per_second
 
 func add_property(title: String, value, order):
