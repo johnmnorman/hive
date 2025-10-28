@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://dk1tiku70hx2x"]
+
+[sub_resource type="Environment" id="Environment_p0lab"]
+background_mode = 1
+background_color = Color(0.67319953, 0.78172207, 1, 1)
+ambient_light_color = Color(1, 1, 0.84705883, 1)
+ssao_enabled = true
+
+[node name="Sky" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_p0lab")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 0.3853746, 0.9227602, 0, -0.9227602, 0.3853746, 0, 0, 0)
+shadow_enabled = true
