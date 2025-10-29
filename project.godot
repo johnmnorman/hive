@@ -84,7 +84,7 @@ sprint={
 
 [physics]
 
-3d/default_gravity=15.0
+3d/default_gravity=18.0
 
 [rendering]
 

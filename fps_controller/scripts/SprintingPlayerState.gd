@@ -17,6 +17,7 @@ func exit() -> void:
 	ANIMATION.speed_scale = 1.0
 	
 func physics_update(delta):
+	
 	set_animation_speed(Global.player.velocity.length())
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)

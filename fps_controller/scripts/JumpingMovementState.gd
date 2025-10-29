@@ -23,7 +23,7 @@ func physics_update(delta):
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED * INPUT_MULTIPLIER, ACCELERATION, DECELERATION)
 	
-	if jumped_twice == false and Input.is_action_just_pressed("jump"):
+	if ENABLE_DOUBLE_JUMP and jumped_twice == false and Input.is_action_just_pressed("jump"):
 		PLAYER.velocity.y = JUMP_VELOCITY * DOUBLE_JUMP_MULTIPLIER
 		ANIMATION.play("jump_midair")
 		jumped_twice = true

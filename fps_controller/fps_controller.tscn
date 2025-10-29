@@ -556,10 +556,7 @@ TOP_ANIM_SPEED = 1.6
 
 [node name="CrouchingPlayerState" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("10_068qp")
-SPEED = null
-ACCELERATION = null
-DECELERATION = null
-CROUCH_SPEED = null
+TOGGLE_CROUCH = false
 
 [node name="SlidingPlayerState" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("11_oq85y")
@@ -567,6 +564,7 @@ script = ExtResource("11_oq85y")
 [node name="JumpingPlayerState" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("12_8jd31")
 INPUT_MULTIPLIER = 1.0
+ENABLE_DOUBLE_JUMP = false
 
 [node name="FallingPlayerState" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("13_eiw87")

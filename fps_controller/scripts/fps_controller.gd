@@ -30,6 +30,7 @@ var _speed : float
 
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
 
+var DEBUG_initialdir : Vector2
 func _input(event):
 	if event.is_action_pressed("exit"):
 		get_tree().quit()
@@ -56,17 +57,20 @@ func _update_camera(delta):
 	
 	_rotation_input = 0.0
 	_tilt_input = 0.0
-	
+
+
 func _ready():
 	Global.player = self
-	
+
 	_speed = SPEED_DEFAULT
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	#CROUCH_SHAPECAST.add_exception($".")
 
 func _physics_process(delta):
 	#Global.debug.add_property(CUR_speed,3)
+	pass
 
+func _process(delta) -> void:
 	_update_camera(delta)
 
 func update_gravity(delta) -> void:
