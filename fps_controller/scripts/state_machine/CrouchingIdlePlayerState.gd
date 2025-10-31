@@ -1,4 +1,4 @@
-class_name CrouchingPlayerState extends PlayerMovementState
+class_name CrouchingIdlePlayerState extends PlayerMovementState
 
 @export var SPEED: float = 3.0
 @export var ACCELERATION : float = 0.1
@@ -10,21 +10,19 @@ class_name CrouchingPlayerState extends PlayerMovementState
 @onready var CROUCH_SHAPECAST : ShapeCast3D = %ShapeCast3D
 
 var RELEASED : bool = false
-var CROUCHING: bool = false
+var CROUCHING_IDLE: bool = false
 
 func enter(previous_state) -> void:
+
 	ANIMATION.speed_scale = 1.0
-	if previous_state.name != "SlidingPlayerState":
-		ANIMATION.play("crouch", -1.0, CROUCH_SPEED)
-	elif previous_state.name == "SlidingPlayerState":
-		ANIMATION.current_animation = "crouch"
-		ANIMATION.seek(1.0, true)
-	CROUCHING = true
+
+	CROUCHING_IDLE = true
 
 	
 func exit() -> void:
 	RELEASED = false
-	CROUCHING = false
+
+	#CROUCHING_IDLE = false
 
 	
 func physics_update(delta):
@@ -32,6 +30,12 @@ func physics_update(delta):
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
 	
+	WEAPON.sway_weapon(delta, false)
+	
+	if PLAYER.velocity.length() > 00:
+
+		transition.emit("CrouchingPlayerState")
+	#WEAPON.bob_weapon(delta, SPEED, 1.0)
 	if TOGGLE_CROUCH == false:
 		if Input.is_action_just_released("crouch"):
 			uncrouch()
@@ -40,13 +44,16 @@ func physics_update(delta):
 			uncrouch()
 	else:
 		if Input.is_action_just_pressed("crouch"):
-			CROUCHING = !CROUCHING
+			CROUCHING_IDLE = !CROUCHING_IDLE
+
 		if Input.is_action_just_pressed("sprint"):
-			CROUCHING = false
+			CROUCHING_IDLE = false
+		
 		uncrouch()
 		
 	if PLAYER.velocity.y < 0.0 and !PLAYER.is_on_floor():
 		transition.emit("FallingPlayerState")
+
 	
 		
 func uncrouch():
@@ -60,7 +67,7 @@ func uncrouch():
 			await get_tree().create_timer(0.1).timeout
 			uncrouch()
 	elif TOGGLE_CROUCH == true:
-		if CROUCH_SHAPECAST.is_colliding() == false and not CROUCHING:
+		if CROUCH_SHAPECAST.is_colliding() == false and not CROUCHING_IDLE:
 			ANIMATION.play("crouch", -1.0, -CROUCH_SPEED * 1.5, true)
 			if ANIMATION.is_playing():
 				await ANIMATION.animation_finished

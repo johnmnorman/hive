@@ -26,7 +26,7 @@ var _speed : float
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
 @export var CAMERA_CONTROLLER : Node3D
 @export var ANIMATION_PLAYER : AnimationPlayer
-
+@export var WEAPON_CONTROLLER : WeaponController
 
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
 

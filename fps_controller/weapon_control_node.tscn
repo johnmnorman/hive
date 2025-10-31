@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://32khayq31n46"]
+
+[ext_resource type="PackedScene" uid="uid://bcx3r8wknvtx2" path="res://assets/weapons/test_weapon.tscn" id="1_kv3fg"]
+
+[node name="WeaponControlNode" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(960, 540)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+cull_mask = 1048574
+fov = 90.0
+
+[node name="Weapon" parent="SubViewportContainer/SubViewport/Camera3D" instance=ExtResource("1_kv3fg")]
+transform = Transform3D(0.033990763, 0.0271015, -0.38756958, 0, 0.38904998, 0.027205024, 0.38851592, -0.0023710756, 0.033907965, 1.24, -1.426, -1.463)
+sway_speed = null
+reset = null

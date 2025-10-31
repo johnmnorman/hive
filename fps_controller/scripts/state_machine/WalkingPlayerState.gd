@@ -5,7 +5,7 @@ extends PlayerMovementState
 #@export var ANIMATION : AnimationPlayer
 @export var SPEED: float = 5.0
 @export var ACCELERATION : float = 0.15
-@export var DECELERATION : float = 0.5
+@export var DECELERATION : float = 0.35
 
 @export var TOP_ANIM_SPEED : float = 2.0
 
@@ -26,6 +26,9 @@ func physics_update(delta):
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
+	
+	WEAPON.sway_weapon(delta, false)
+	WEAPON.bob_weapon(delta, SPEED, 1.3)
 	
 	#Global.debug.add_property("AnimSpeed",ANIMATION.speed_scale,4)
 	

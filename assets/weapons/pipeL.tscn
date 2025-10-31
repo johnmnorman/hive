@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://bwgqsll4p4fg6"]
+
+[ext_resource type="Script" uid="uid://ceqm00vqd0b4k" path="res://assets/weapons/weapon_controller.gd" id="1_8xqvf"]
+[ext_resource type="Resource" uid="uid://chgkysgw5us3m" path="res://assets/weapons/pipe/pipeL.tres" id="2_8xqvf"]
+[ext_resource type="ArrayMesh" uid="uid://cx06iu04ulo7w" path="res://assets/weapons/pipe/mesh_pipe.res" id="3_01l20"]
+
+[node name="Weapon" type="Node3D"]
+script = ExtResource("1_8xqvf")
+WEAPON_TYPE = ExtResource("2_8xqvf")
+
+[node name="WeaponMesh" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+layers = 2
+mesh = ExtResource("3_01l20")

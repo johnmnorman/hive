@@ -1,8 +1,8 @@
 class_name SprintingPlayerState extends PlayerMovementState
 #@export var ANIMATION : AnimationPlayer
 @export var SPEED: float = 8.5
-@export var ACCELERATION : float = 0.15
-@export var DECELERATION : float = 0.4
+@export var ACCELERATION : float = 0.2
+@export var DECELERATION : float = 0.3
 
 @export var TOP_ANIM_SPEED : float = 2
 
@@ -22,6 +22,10 @@ func physics_update(delta):
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
+	
+	WEAPON.sway_weapon(delta, false)
+
+	WEAPON.bob_weapon(delta, SPEED, 2)
 	
 	if Input.is_action_just_released("sprint") or PLAYER.velocity.length() == 0: 
 			transition.emit("IdlePlayerState")

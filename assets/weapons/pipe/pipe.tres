@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Weapons" load_steps=3 format=3 uid="uid://b02rq44bflrl1"]
+
+[ext_resource type="Script" uid="uid://big6xo1w6262w" path="res://assets/weapons/weapons.gd" id="1_2s82i"]
+[ext_resource type="ArrayMesh" uid="uid://cx06iu04ulo7w" path="res://assets/weapons/pipe/mesh_pipe.res" id="1_60eja"]
+
+[resource]
+script = ExtResource("1_2s82i")
+name = &"Pipe"
+position = Vector3(1.24, -1.426, -1.463)
+rotation = Vector3(-4, -85, 0)
+scale = Vector3(0.05, 0.05, 0.05)
+mesh = ExtResource("1_60eja")
+metadata/_custom_type_script = "uid://big6xo1w6262w"
