@@ -16,6 +16,8 @@ var _current_rotation : float
 
 var _speed : float
 
+var current_player_state : String = "None"
+
 @export var SPEED_DEFAULT : float = 5.0
 @export var SPEED_SPRINTING : float = 8.5
 
@@ -24,9 +26,10 @@ var _speed : float
 @export var MOUSE_SENSITIVITY : float = 0.5
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
-@export var CAMERA_CONTROLLER : Node3D
+@export var CAMERA_CONTROLLER : Camera3D
 @export var ANIMATION_PLAYER : AnimationPlayer
 @export var WEAPON_CONTROLLER : WeaponController
+
 
 @export_range(5, 10, 0.1) var CROUCH_SPEED : float = 7.0
 
@@ -67,6 +70,7 @@ func _ready():
 	#CROUCH_SHAPECAST.add_exception($".")
 
 func _physics_process(delta):
+	Global.debug.add_property("Animation", ANIMATION_PLAYER.current_animation,4)
 	#Global.debug.add_property(CUR_speed,3)
 	pass
 

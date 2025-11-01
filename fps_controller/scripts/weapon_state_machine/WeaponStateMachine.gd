@@ -1,4 +1,5 @@
-class_name StateMachine
+class_name WeaponStateMachine
+
 
 extends Node
 @export var CURRENT_STATE : State
@@ -23,14 +24,14 @@ func _process(delta):
 	
 func _physics_process(delta):
 	CURRENT_STATE.physics_update(delta)
-	Global.debug.add_property("CurrentState", CURRENT_STATE.name,1)
+	Global.debug.add_property("CurrentWeaponState", CURRENT_STATE.name,2)
 
 func on_child_transition(new_state_name: StringName) -> void:
 	var new_state = states.get(new_state_name)
 	if new_state != null:
 		if new_state != CURRENT_STATE:
 			CURRENT_STATE.exit()
-			PLAYER.current_player_state = new_state.name
+			PLAYER.current_player_state = CURRENT_STATE.name
 			new_state.enter(CURRENT_STATE)
 			CURRENT_STATE = new_state
 	else:

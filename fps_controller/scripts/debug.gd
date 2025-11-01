@@ -5,13 +5,18 @@ extends PanelContainer
 #Updates each time it's called
 
 @onready var property_container = %VBoxContainer
+var DEBUG_MODE : bool = true
 
 #var property
 var frames_per_second : String
 
+func _print(message):
+	if DEBUG_MODE == true:
+		print(message)
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	visible = false
+	visible = true
 #	add_debug_property("FPS", frames_per_second)
 	Global.debug = self
 

@@ -11,6 +11,7 @@ class_name JumpingPlayerState extends PlayerMovementState
 @export_range(0.4, 1.5, 0.1) var DOUBLE_JUMP_MULTIPLIER : float = 0.8
 
 var jumped_twice: bool = false
+var has_crouched := false
 
 func enter(previous_state) -> void:
 	PLAYER.velocity.y += JUMP_VELOCITY
@@ -18,6 +19,7 @@ func enter(previous_state) -> void:
 
 func exit() -> void:
 	jumped_twice = false
+	has_crouched = false
 	
 func physics_update(delta):
 	PLAYER.update_gravity(delta)
@@ -32,9 +34,13 @@ func physics_update(delta):
 	if Input.is_action_just_released("jump"):
 		if PLAYER.velocity.y > 0.0:
 			PLAYER.velocity.y = PLAYER.velocity.y / 2.0
+	if Input.is_action_just_pressed("crouch"):
+		has_crouched = true
 
 	PLAYER.update_velocity()
 	
-	if PLAYER.is_on_floor():
+	if PLAYER.is_on_floor() and has_crouched:
+		transition.emit("CrouchingPlayerState")
+	elif PLAYER.is_on_floor():
 		ANIMATION.play("jump_end")
 		transition.emit("IdlePlayerState")

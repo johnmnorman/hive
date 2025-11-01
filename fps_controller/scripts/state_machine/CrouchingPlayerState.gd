@@ -12,9 +12,17 @@ class_name CrouchingPlayerState extends PlayerMovementState
 var RELEASED : bool = false
 var CROUCHING: bool = false
 
+# TODO Idle state has an await that can override the crouch animation.
+# Maybe make the crouch a tween function instead of animation player,
+# so that crouching can't be overridden by other animations?
+
 func enter(previous_state) -> void:
+	Global.debug._print("Entering crouched state.")
 
 	ANIMATION.speed_scale = 1.0
+	if ANIMATION.current_animation == "jump_end" and ANIMATION.is_playing():
+		Global.debug._print("Jump to crouch")
+		ANIMATION.play("crouch", -1.0, CROUCH_SPEED)
 	if previous_state.name != "SlidingPlayerState":
 		ANIMATION.play("crouch", -1.0, CROUCH_SPEED)
 
@@ -22,6 +30,7 @@ func enter(previous_state) -> void:
 		ANIMATION.current_animation = "crouch"
 		ANIMATION.seek(1.0, true)
 	CROUCHING = true
+
 
 	
 func exit() -> void:
@@ -31,29 +40,26 @@ func exit() -> void:
 
 	
 func physics_update(delta):
+
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
 	
-	WEAPON.sway_weapon(delta, false)
-	if PLAYER.velocity.length() > 0.0:
-		WEAPON.bob_weapon(delta, SPEED, 1.0)
-	
-	
+func update(_delta):
 	if TOGGLE_CROUCH == false:
 		if Input.is_action_just_released("crouch"):
 			uncrouch()
 		elif Input.is_action_pressed("crouch") == false and RELEASED == false:
 			RELEASED = true
 			uncrouch()
-	else:
+	elif TOGGLE_CROUCH:
 		if Input.is_action_just_pressed("crouch"):
 
 			CROUCHING = !CROUCHING
 		if Input.is_action_just_pressed("sprint"):
 			CROUCHING = false
 
-		uncrouch()
+		toggle_crouch()
 		
 	if PLAYER.velocity.y < 0.0 and !PLAYER.is_on_floor():
 		transition.emit("FallingPlayerState")
@@ -61,23 +67,21 @@ func physics_update(delta):
 	
 		
 func uncrouch():
-	if TOGGLE_CROUCH == false:
-		if CROUCH_SHAPECAST.is_colliding() == false and Input.is_action_pressed("crouch") == false:
-			ANIMATION.play("crouch", -1.0, -CROUCH_SPEED * 1.5, true)
-			if ANIMATION.is_playing():
-				await ANIMATION.animation_finished
-			transition.emit("IdlePlayerState")
-		elif CROUCH_SHAPECAST.is_colliding() == true:
-			await get_tree().create_timer(0.1).timeout
-			uncrouch()
-	elif TOGGLE_CROUCH == true:
+	if CROUCH_SHAPECAST.is_colliding() == false and Input.is_action_pressed("crouch") == false:
+		ANIMATION.play("crouch", -1.0, -CROUCH_SPEED * 1.5, true)
+		if ANIMATION.is_playing():
+			await ANIMATION.animation_finished
+		transition.emit("IdlePlayerState")
+	elif CROUCH_SHAPECAST.is_colliding() == true:
+		await get_tree().create_timer(0.1).timeout
+		uncrouch()
 
-		if CROUCH_SHAPECAST.is_colliding() == false and not CROUCHING:
-			ANIMATION.play("crouch", -1.0, -CROUCH_SPEED * 1.5, true)
-			if ANIMATION.is_playing():
-				await ANIMATION.animation_finished
-
-			transition.emit("IdlePlayerState")
-		elif CROUCH_SHAPECAST.is_colliding() == true:
-			await get_tree().create_timer(0.1).timeout
-			uncrouch()
+func toggle_crouch():
+	if CROUCH_SHAPECAST.is_colliding() == false and not CROUCHING:
+		ANIMATION.play("crouch", -1.0, -CROUCH_SPEED * 1.5, true)
+		if ANIMATION.is_playing():
+			await ANIMATION.animation_finished
+		transition.emit("IdlePlayerState")
+	elif CROUCH_SHAPECAST.is_colliding() == true and not CROUCHING:
+		await get_tree().create_timer(0.1).timeout
+		toggle_crouch()

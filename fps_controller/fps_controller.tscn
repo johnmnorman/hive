@@ -1,9 +1,11 @@
-[gd_scene load_steps=29 format=3 uid="uid://cepweyknvbd8i"]
+[gd_scene load_steps=32 format=3 uid="uid://cepweyknvbd8i"]
 
 [ext_resource type="Script" uid="uid://dlpssv1yn5knm" path="res://fps_controller/scripts/fps_controller.gd" id="1_pquoo"]
 [ext_resource type="Script" uid="uid://dta24p22nodjy" path="res://fps_controller/scripts/reticle.gd" id="2_icmn0"]
 [ext_resource type="Animation" uid="uid://cx7tdpei3vkyc" path="res://sprint.res" id="2_n0jou"]
+[ext_resource type="Script" uid="uid://dguln8wqb2kja" path="res://fps_controller/scripts/weapon_state_machine/WeaponStateMachine.gd" id="3_lpsq1"]
 [ext_resource type="Theme" uid="uid://d4b0m4hwf2j0k" path="res://fps_controller/debug.tres" id="3_vgwmt"]
+[ext_resource type="Script" uid="uid://nbo5odlhgkmh" path="res://fps_controller/scripts/animation_player.gd" id="4_8qu2y"]
 [ext_resource type="Script" uid="uid://b1qcs1fiwerkp" path="res://fps_controller/scripts/debug.gd" id="4_y4jce"]
 [ext_resource type="Script" uid="uid://bm5vbeingd685" path="res://scripts/state_machine.gd" id="5_yyylg"]
 [ext_resource type="Script" uid="uid://b81gawwwreheu" path="res://fps_controller/scripts/state_machine/IdlePlayerState.gd" id="6_qutt2"]
@@ -15,6 +17,7 @@
 [ext_resource type="Script" uid="uid://ht58rbcdu7n4" path="res://fps_controller/scripts/state_machine/FallingPlayerState.gd" id="13_eiw87"]
 [ext_resource type="Script" uid="uid://dqkpnjmrlud7l" path="res://fps_controller/scripts/stamina_component.gd" id="14_e53as"]
 [ext_resource type="PackedScene" uid="uid://bcx3r8wknvtx2" path="res://assets/weapons/test_weapon.tscn" id="15_imp6r"]
+[ext_resource type="Script" uid="uid://f4q4qvrorxiy" path="res://fps_controller/scripts/weapon_state_machine/IdleWeaponState.gd" id="17_nopyc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j0767"]
 
@@ -500,7 +503,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_j0767")
 
 [node name="PlaceholderMesh" type="MeshInstance3D" parent="CollisionShape3D"]
-visible = false
 mesh = SubResource("CapsuleMesh_ja5wc")
 
 [node name="CameraController" type="Node3D" parent="."]
@@ -524,6 +526,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_vgwmt")
 }
 blend_times = [&"idle", &"sprint", 0.2, &"idle", &"walk", 0.2, &"jump_end", &"jump_start", 0.1, &"jump_end", &"walking", 0.5, &"sprint", &"idle", 0.35, &"sprint", &"walk", 0.3, &"walk", &"idle", 0.5, &"walk", &"sprint", 0.25]
+script = ExtResource("4_8qu2y")
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="."]
 unique_name_in_owner = true
@@ -547,10 +550,6 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_icmn0")
@@ -592,7 +591,7 @@ layout_mode = 2
 
 [node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("CURRENT_STATE")]
 script = ExtResource("5_yyylg")
-CURRENT_STATE = NodePath("IdlePlayerState")
+CURRENT_STATE = NodePath("FallingPlayerState")
 
 [node name="IdlePlayerState" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("6_qutt2")
@@ -624,3 +623,10 @@ DECELERATION = 0.01
 [node name="StaminaComponent" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("14_e53as")
+
+[node name="WeaponStateMachine" type="Node" parent="." node_paths=PackedStringArray("CURRENT_STATE")]
+script = ExtResource("3_lpsq1")
+CURRENT_STATE = NodePath("IdleWeaponState")
+
+[node name="IdleWeaponState" type="Node" parent="WeaponStateMachine"]
+script = ExtResource("17_nopyc")

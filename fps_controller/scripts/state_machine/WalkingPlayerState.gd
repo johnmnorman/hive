@@ -27,13 +27,14 @@ func physics_update(delta):
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
 	
-	WEAPON.sway_weapon(delta, false)
-	WEAPON.bob_weapon(delta, SPEED, 1.3)
-	
+	#WEAPON.sway_weapon(delta, false)
+	#WEAPON.bob_weapon(delta, SPEED, 1.3)
+	#
 	#Global.debug.add_property("AnimSpeed",ANIMATION.speed_scale,4)
 	
 	set_animation_speed(PLAYER.velocity.length())
-	
+
+func update(_delta):
 	if Input.is_action_just_pressed("sprint") and PLAYER.is_on_floor():
 		transition.emit("SprintingPlayerState")
 	

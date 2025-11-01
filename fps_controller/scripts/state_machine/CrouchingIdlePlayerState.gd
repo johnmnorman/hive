@@ -31,7 +31,8 @@ func physics_update(delta):
 	PLAYER.update_velocity()
 	
 	WEAPON.sway_weapon(delta, false)
-	
+
+func update(_delta):
 	if PLAYER.velocity.length() > 00:
 
 		transition.emit("CrouchingPlayerState")

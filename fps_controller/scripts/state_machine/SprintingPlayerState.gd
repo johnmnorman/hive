@@ -23,10 +23,11 @@ func physics_update(delta):
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
 	
-	WEAPON.sway_weapon(delta, false)
-
-	WEAPON.bob_weapon(delta, SPEED, 2)
+	#WEAPON.sway_weapon(delta, false)
+#
+	#WEAPON.bob_weapon(delta, SPEED, 2)
 	
+func update(_delta):
 	if Input.is_action_just_released("sprint") or PLAYER.velocity.length() == 0: 
 			transition.emit("IdlePlayerState")
 

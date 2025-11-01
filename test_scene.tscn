@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=4 uid="uid://c7l47sqh6qcia"]
+[gd_scene load_steps=39 format=4 uid="uid://c7l47sqh6qcia"]
 
 [ext_resource type="Script" uid="uid://cwu5cf7a0awcd" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_coq8p"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_2nij2"]
@@ -209,6 +209,10 @@ points = PackedVector3Array(12, 9, -19, 12, -1, -19, 9, 9, -19, 9, -1, -19, 12, 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_1ufot"]
 points = PackedVector3Array(-6, 9, -17, -6, -1, -17, -9, 9, -17, -9, -1, -17, -6, 9, -20, -6, -1, -20, -9, 9, -20, -9, -1, -20)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_4gito"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_fbuy2"]
+
 [node name="Node3D" type="Node3D"]
 
 [node name="FuncGodotMap" type="Node3D" parent="."]
@@ -263,7 +267,16 @@ shape = SubResource("ConvexPolygonShape3D_lvjxf")
 shape = SubResource("ConvexPolygonShape3D_1ufot")
 
 [node name="FPSController" parent="." instance=ExtResource("5_2nij2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.861708, -0.84550095, -2.7477293)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.861708, 0.038764298, -2.7477293)
 
 [node name="Sky" parent="." instance=ExtResource("6_7cbxl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.47, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4.0517797)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("SphereShape3D_4gito")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("SphereMesh_fbuy2")

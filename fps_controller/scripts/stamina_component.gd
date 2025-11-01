@@ -17,7 +17,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	Global.debug.add_property("Exertion", exertion, 4)
+	#Global.debug.add_property("Exertion", exertion, 4)
 
 	if PLAYER.velocity.length() > 6.0 and exertion < exertion_max:
 		exertion += SPRINT_COST

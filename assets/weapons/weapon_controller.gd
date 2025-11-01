@@ -32,6 +32,7 @@ var idle_sway_rotation_strength
 var weapon_bob_amount : Vector2 = Vector2(0,0)
 var current_bob_speed: float = 0.0
 
+var bullet_hole_decal = preload("res://scenes/bullet_hole.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	await owner.ready
@@ -60,7 +61,7 @@ func load_weapon() -> void:
 	
 func sway_weapon(delta, is_idle: bool) -> void:
 	# Clamp mouse movement
-	Global.debug.add_property("Sway",weapon_bob_amount,5)
+	#Global.debug.add_property("Sway",weapon_bob_amount,5)
 	mouse_movement = mouse_movement.clamp(WEAPON_TYPE.sway_min, WEAPON_TYPE.sway_max)
 		
 	if is_idle:
@@ -118,6 +119,36 @@ func get_sway_noise() -> float:
 	var noise_location : float = sway_noise.noise.get_noise_2d(player_position.x,player_position.y)
 		
 	return noise_location
+
+func attack() -> void:
+	Global.debug._print("Attack raycast:")
+	var camera = Global.player.CAMERA_CONTROLLER
+	var space_state = camera.get_world_3d().direct_space_state
+	var screen_center = get_viewport().size / 2
+	Global.debug._print(screen_center)
+	var origin = camera.global_position
+	var forward = -camera.global_transform.basis.z
+	var end = origin + forward * 1000
+	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	query.exclude = [self]
+	var result = space_state.intersect_ray(query)
+	Global.debug._print(result)
+	if result:
+		_bullet_hole(result.get("position"), result.get("normal"))
+	
+func _bullet_hole(position: Vector3, normal: Vector3) -> void:
+	var instance = bullet_hole_decal.instantiate()
+	get_tree().root.add_child(instance)
+	instance.global_position = position
+	instance.look_at(instance.global_transform.origin + normal, Vector3.UP)
+	instance.rotate_object_local(Vector3(1,0,0), 90)
+	await get_tree().create_timer(30).timeout
+	var fade = get_tree().create_tween()
+	fade.tween_property(instance, "modulate:a", 0.0, 1.5)
+	await get_tree().create_timer(1.5).timeout
+	instance.queue_free()
 	
 #func _physics_process(delta):
 	#_bob_weapon(delta, 5.0, 0.05, 0.02)
