@@ -17,6 +17,7 @@ var _current_rotation : float
 var _speed : float
 
 var current_player_state : String = "None"
+var is_breathing := true
 
 @export var SPEED_DEFAULT : float = 5.0
 @export var SPEED_SPRINTING : float = 8.5
@@ -28,6 +29,7 @@ var current_player_state : String = "None"
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
 @export var CAMERA_CONTROLLER : Camera3D
 @export var ANIMATION_PLAYER : AnimationPlayer
+@export var CROUCH_HANDLER : AnimationPlayer
 @export var WEAPON_CONTROLLER : WeaponController
 
 

@@ -4,7 +4,7 @@ class_name CrouchingPlayerState extends PlayerMovementState
 @export var ACCELERATION : float = 0.1
 @export var DECELERATION : float = 0.3
 @export var TOGGLE_CROUCH : bool = true
-
+@export var TOP_ANIM_SPEED : float = 1.5
 @export_range(1, 6, 0.1) var CROUCH_SPEED : float = 4.0
 
 @onready var CROUCH_SHAPECAST : ShapeCast3D = %ShapeCast3D
@@ -19,18 +19,20 @@ var CROUCHING: bool = false
 func enter(previous_state) -> void:
 	Global.debug._print("Entering crouched state.")
 
-	ANIMATION.speed_scale = 1.0
-	if ANIMATION.current_animation == "jump_end" and ANIMATION.is_playing():
-		Global.debug._print("Jump to crouch")
-		ANIMATION.play("crouch", -1.0, CROUCH_SPEED)
+	CROUCH_HANDLER.speed_scale = 1.0
 	if previous_state.name != "SlidingPlayerState":
-		ANIMATION.play("crouch", -1.0, CROUCH_SPEED)
+		CROUCH_HANDLER.play("crouching/crouch", -1.0, CROUCH_SPEED)
 
 	elif previous_state.name == "SlidingPlayerState":
-		ANIMATION.current_animation = "crouch"
-		ANIMATION.seek(1.0, true)
+		CROUCH_HANDLER.current_animation = "crouching/crouch"
+		CROUCH_HANDLER.seek(1.0, true)
 	CROUCHING = true
 
+	if ANIMATION.is_playing() and ANIMATION.current_animation == "jump_end":
+		await ANIMATION.animation_finished
+		ANIMATION.play("walk",-1.0,1.0)
+	else:
+		ANIMATION.play("walk",-1.0,1.0)
 
 	
 func exit() -> void:
@@ -45,6 +47,8 @@ func physics_update(delta):
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
 	
+	set_animation_speed(PLAYER.velocity.length())
+
 func update(_delta):
 	if TOGGLE_CROUCH == false:
 		if Input.is_action_just_released("crouch"):
@@ -68,9 +72,9 @@ func update(_delta):
 		
 func uncrouch():
 	if CROUCH_SHAPECAST.is_colliding() == false and Input.is_action_pressed("crouch") == false:
-		ANIMATION.play("crouch", -1.0, -CROUCH_SPEED * 1.5, true)
-		if ANIMATION.is_playing():
-			await ANIMATION.animation_finished
+		CROUCH_HANDLER.play("crouching/crouch", -1.0, -CROUCH_SPEED * 1.5, true)
+		if CROUCH_HANDLER.is_playing():
+			await CROUCH_HANDLER.animation_finished
 		transition.emit("IdlePlayerState")
 	elif CROUCH_SHAPECAST.is_colliding() == true:
 		await get_tree().create_timer(0.1).timeout
@@ -78,10 +82,14 @@ func uncrouch():
 
 func toggle_crouch():
 	if CROUCH_SHAPECAST.is_colliding() == false and not CROUCHING:
-		ANIMATION.play("crouch", -1.0, -CROUCH_SPEED * 1.5, true)
-		if ANIMATION.is_playing():
-			await ANIMATION.animation_finished
+		CROUCH_HANDLER.play("crouching/crouch", -1.0, -CROUCH_SPEED * 1.5, true)
+		if CROUCH_HANDLER.is_playing():
+			await CROUCH_HANDLER.animation_finished
 		transition.emit("IdlePlayerState")
 	elif CROUCH_SHAPECAST.is_colliding() == true and not CROUCHING:
 		await get_tree().create_timer(0.1).timeout
 		toggle_crouch()
+
+func set_animation_speed(spd):
+	var alpha = remap(spd, 0.0, SPEED, 0.0, 1.0)
+	ANIMATION.speed_scale = lerp(0.0, TOP_ANIM_SPEED, alpha)

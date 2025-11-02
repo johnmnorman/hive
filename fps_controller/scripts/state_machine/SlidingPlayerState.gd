@@ -13,11 +13,11 @@ var initial_direction : Vector2
 func enter(previous_state) -> void:
 	#print(PLAYER._current_rotation)
 	#set_tilt(PLAYER._current_rotation)
-	ANIMATION.get_animation("slide").track_set_key_value(5, 0, PLAYER.velocity.length()) #speed
+	CROUCH_HANDLER.get_animation("crouching/slide").track_set_key_value(5, 0, PLAYER.velocity.length()) #speed
 
 	initial_direction = Vector2(PLAYER.velocity.x, PLAYER.velocity.z).normalized()
-	ANIMATION.speed_scale = 1.0
-	ANIMATION.play("slide", -1.0, SLIDE_ANIM_SPEED)
+	CROUCH_HANDLER.speed_scale = 1.0
+	CROUCH_HANDLER.play("crouching/slide", -1.0, SLIDE_ANIM_SPEED)
 	
 func physics_update(delta):
 	PLAYER.update_gravity(delta)
